@@ -18,9 +18,10 @@ class Sample(models.Model):
     # For example: 2018-01-02 12:56:13.327164
     date        = models.DateTimeField()
 
-    # The
+    # The module responsible of the sample
+    # One to many relationship
     module      = models.ForeignKey(
         Module
-        , related_name="samples"
-        , on_delete=models.CASCADE
+        , related_name="samples"    # Enable the use of query{allModules{samples{...}}}
+        , on_delete=models.CASCADE  # Delete the samples when the module is removed
     )
