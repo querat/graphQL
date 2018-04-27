@@ -19,7 +19,7 @@ class Sample(models.Model):
     date        = models.DateTimeField()
 
     # The
-    moduleId    = models.ForeignKey(
+    module      = models.ForeignKey(
         Module
         , related_name="samples"
         , on_delete=models.CASCADE
