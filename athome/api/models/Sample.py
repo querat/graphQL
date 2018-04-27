@@ -21,6 +21,6 @@ class Sample(models.Model):
     # The
     moduleId    = models.ForeignKey(
         Module
-        , related_name="moduleId"
+        , related_name="samples"
         , on_delete=models.CASCADE
     )

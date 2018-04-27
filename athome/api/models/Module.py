@@ -26,13 +26,13 @@ class Module(models.Model):
     type        = models.TextField()
 
     # The vendor of the module
-    # "woodbox"
+    # "athome"
     vendor      = models.TextField()
 
     # environmental samples gathered by the module.
     # (see the Sample type)
     # returned as an array
-    # samples = # See Sample
+    # samples = # (See models/Sample.py)
 
     def __str__(self):
         return self.name
