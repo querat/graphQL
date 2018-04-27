@@ -1,4 +1,4 @@
-from django.db import models
+from django.db                  import models
 
 class Module(models.Model):
     # The unique identifier of the module
@@ -32,7 +32,7 @@ class Module(models.Model):
     # environmental samples gathered by the module.
     # (see the Sample type)
     # returned as an array
-    # samples = ????
+    # samples = # See Sample
 
     def __str__(self):
         return self.name
