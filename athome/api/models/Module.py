@@ -1,6 +1,7 @@
 from django.db                  import models
 
 class Module(models.Model):
+
     # The unique identifier of the module
     id          = models.AutoField(primary_key=True)
 
