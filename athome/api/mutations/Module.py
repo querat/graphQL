@@ -39,13 +39,13 @@ class CreateModule(graphene.Mutation):
 
 
 class UpdateModule(graphene.Mutation):
-    class Arguments:
-        moduleInput = graphene.Argument(ModuleInput)
-        moduleId = graphene.Argument(graphene.ID)
 
     module = graphene.Field(ModuleNode)
 
-    # id          = graphene.Field(graphene.Int)
+    class Arguments:
+        moduleInput = graphene.Argument(ModuleInput)
+        moduleId    = graphene.Argument(graphene.ID)
+
 
     @staticmethod
     def mutate(root, info, **kwargs):
@@ -57,4 +57,3 @@ class UpdateModule(graphene.Mutation):
 
         toUpdate.save(force_update=True)
         return UpdateModule(module=toUpdate)
-    
