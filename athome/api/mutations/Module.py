@@ -46,7 +46,6 @@ class UpdateModule(graphene.Mutation):
         moduleInput = graphene.Argument(ModuleInput)
         moduleId    = graphene.Argument(graphene.ID)
 
-
     @staticmethod
     def mutate(root, info, **kwargs):
         moduleInput = kwargs.get("moduleInput")
