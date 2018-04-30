@@ -1,9 +1,6 @@
 import  graphene
-import  graphene_django
 from    graphene_django     import DjangoObjectType
 from    athome.api.models   import Module, Sample
-
-print(graphene.__version__)
 
 class ModuleNode(DjangoObjectType):
 
@@ -51,14 +48,22 @@ class CreateLol(graphene.Mutation):
 
 
 class CreateModule(graphene.Mutation):
-    class Input:
-        module      = graphene.Argument(ModuleInput)
+    class Arguments:
+        moduleInput     = graphene.Argument(ModuleInput)
 
     module = graphene.Field(ModuleNode)
 
     @staticmethod
     def mutate(root, info, **kwargs):
-        input = kwargs.get("module")
+        input = kwargs.get("moduleInput")
+
+        created = Module.objects.create(
+            mac         = input.mac
+            , name      = input.name
+            , location  = input.location
+            , type      = input.type
+            , vendor    = input.vendor
+        )
 
         module = ModuleNode(
             mac         = input.mac
@@ -67,6 +72,7 @@ class CreateModule(graphene.Mutation):
             , type      = input.type
             , vendor    = input.vendor
         )
+        module.id = created.id
 
         return CreateModule(module=module)
 

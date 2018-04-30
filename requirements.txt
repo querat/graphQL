@@ -1,0 +1,3 @@
+django
+graphene_django>=2.0
+graphene
