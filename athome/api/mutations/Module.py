@@ -18,26 +18,6 @@ class ModuleInput(graphene.InputObjectType):
     vendor          = graphene.String()
 
 
-class UpdateModule(graphene.Mutation):
-    class Arguments:
-        moduleInput = graphene.Argument(ModuleInput)
-        moduleId    = graphene.Argument(graphene.ID)
-
-    module      = graphene.Field(ModuleNode)
-    # id          = graphene.Field(graphene.Int)
-
-    @staticmethod
-    def mutate(root, info, **kwargs):
-        moduleInput = kwargs.get("moduleInput")
-        moduleId    = kwargs.get("moduleId")
-        toUpdate    = Module.objects.get(pk=moduleId)
-
-        [setattr(toUpdate, key, value) for key, value in moduleInput.items()]
-
-        toUpdate.save(force_update=True)
-        return UpdateModule(module=toUpdate)
-
-
 class CreateModule(graphene.Mutation):
     class Arguments:
         moduleInput = graphene.Argument(ModuleInput)
@@ -56,3 +36,25 @@ class CreateModule(graphene.Mutation):
         )
         dbModule.save(force_insert=True)
         return CreateModule(module=dbModule)
+
+
+class UpdateModule(graphene.Mutation):
+    class Arguments:
+        moduleInput = graphene.Argument(ModuleInput)
+        moduleId = graphene.Argument(graphene.ID)
+
+    module = graphene.Field(ModuleNode)
+
+    # id          = graphene.Field(graphene.Int)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        moduleInput = kwargs.get("moduleInput")
+        moduleId = kwargs.get("moduleId")
+        toUpdate = Module.objects.get(pk=moduleId)
+
+        [setattr(toUpdate, key, value) for key, value in moduleInput.items()]
+
+        toUpdate.save(force_update=True)
+        return UpdateModule(module=toUpdate)
+    
