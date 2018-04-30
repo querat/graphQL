@@ -49,32 +49,24 @@ class CreateLol(graphene.Mutation):
 
 class CreateModule(graphene.Mutation):
     class Arguments:
-        moduleInput     = graphene.Argument(ModuleInput)
+        moduleInput = graphene.Argument(ModuleInput)
 
     module = graphene.Field(ModuleNode)
 
     @staticmethod
     def mutate(root, info, **kwargs):
-        input = kwargs.get("moduleInput")
+        moduleInput = kwargs.get("moduleInput")
 
-        created = Module.objects.create(
-            mac         = input.mac
-            , name      = input.name
-            , location  = input.location
-            , type      = input.type
-            , vendor    = input.vendor
+        module = Module(
+            mac         = moduleInput.mac
+            , name      = moduleInput.name
+            , location  = moduleInput.location
+            , type      = moduleInput.type
+            , vendor    = moduleInput.vendor
         )
-
-        module = ModuleNode(
-            mac         = input.mac
-            , name      = input.name
-            , location  = input.location
-            , type      = input.type
-            , vendor    = input.vendor
-        )
-        module.id = created.id
-
+        module.save()
         return CreateModule(module=module)
+
 
 class Mutation(object):
     createModule        = CreateModule.Field()
