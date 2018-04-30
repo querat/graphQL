@@ -1,6 +1,7 @@
 import  graphene
-from    graphene_django     import DjangoObjectType
-from    athome.api.models   import Module, Sample
+from    graphene_django         import DjangoObjectType
+from    graphene_django.debug   import DjangoDebug
+from    athome.api.models       import Module, Sample
 
 class ModuleNode(DjangoObjectType):
 
@@ -30,21 +31,31 @@ class Query(object):
 
 
 class ModuleInput(graphene.InputObjectType):
-    mac             = graphene.String(required=True)
-    name            = graphene.String(required=True)
-    location        = graphene.String(required=True)
-    type            = graphene.String(required=True)
-    vendor          = graphene.String(required=True)
+    mac             = graphene.String()
+    name            = graphene.String()
+    location        = graphene.String()
+    type            = graphene.String()
+    vendor          = graphene.String()
 
 
-class CreateLol(graphene.Mutation):
+class UpdateModule(graphene.Mutation):
     class Arguments:
-        lol = graphene.String()
+        moduleInput = graphene.Argument(ModuleInput)
+        moduleId    = graphene.Argument(graphene.ID)
 
-    lol = graphene.Field(lambda: graphene.String)
+    module      = graphene.Field(ModuleNode)
+    # id          = graphene.Field(graphene.Int)
 
-    def mutate(self, info, lol):
-        return CreateLol(lol=lol)
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        moduleInput = kwargs.get("moduleInput")
+        moduleId    = kwargs.get("moduleId")
+        toUpdate    = Module.objects.get(pk=moduleId)
+
+        [setattr(toUpdate, key, value) for key, value in moduleInput.items()]
+
+        toUpdate.save(force_update=True)
+        return UpdateModule(module=toUpdate)
 
 
 class CreateModule(graphene.Mutation):
@@ -56,19 +67,18 @@ class CreateModule(graphene.Mutation):
     @staticmethod
     def mutate(root, info, **kwargs):
         moduleInput = kwargs.get("moduleInput")
-
-        module = Module(
+        dbModule = Module(
             mac         = moduleInput.mac
             , name      = moduleInput.name
             , location  = moduleInput.location
             , type      = moduleInput.type
             , vendor    = moduleInput.vendor
         )
-        module.save()
-        return CreateModule(module=module)
+        dbModule.save(force_insert=True)
+        return CreateModule(module=dbModule)
 
 
 class Mutation(object):
     createModule        = CreateModule.Field()
-    createlol           = CreateLol.Field()
-
+    updateModule        = UpdateModule.Field()
+    __debug             = graphene.Field(DjangoDebug)
