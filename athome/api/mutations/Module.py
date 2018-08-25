@@ -1,6 +1,7 @@
 import graphene
-from graphene_django    import DjangoObjectType
-from athome.api.models  import Module
+from graphene_django import DjangoObjectType
+from athome.api.models import Module
+
 
 class ModuleNode(DjangoObjectType):
     def resolve_id(self, info):
@@ -11,11 +12,11 @@ class ModuleNode(DjangoObjectType):
 
 
 class ModuleInput(graphene.InputObjectType):
-    mac             = graphene.String()
-    name            = graphene.String()
-    location        = graphene.String()
-    type            = graphene.String()
-    vendor          = graphene.String()
+    mac = graphene.String()
+    name = graphene.String()
+    location = graphene.String()
+    type = graphene.String()
+    vendor = graphene.String()
 
 
 class CreateModule(graphene.Mutation):
@@ -28,23 +29,22 @@ class CreateModule(graphene.Mutation):
     def mutate(root, info, **kwargs):
         moduleInput = kwargs.get("moduleInput")
         dbModule = Module(
-            mac         = moduleInput.mac
-            , name      = moduleInput.name
-            , location  = moduleInput.location
-            , type      = moduleInput.type
-            , vendor    = moduleInput.vendor
+            mac=moduleInput.mac
+            , name=moduleInput.name
+            , location=moduleInput.location
+            , type=moduleInput.type
+            , vendor=moduleInput.vendor
         )
         dbModule.save(force_insert=True)
         return CreateModule(module=dbModule)
 
 
 class UpdateModule(graphene.Mutation):
-
     module = graphene.Field(ModuleNode)
 
     class Arguments:
         moduleInput = graphene.Argument(ModuleInput)
-        moduleId    = graphene.Argument(graphene.ID)
+        moduleId = graphene.Argument(graphene.ID)
 
     @staticmethod
     def mutate(root, info, **kwargs):
