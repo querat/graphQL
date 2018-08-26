@@ -14,21 +14,6 @@ class BoxNode(DjangoObjectType):
 class BoxInput(graphene.InputObjectType):
     userId = graphene.ID()
 
-# class CreateBox(graphene.Mutation):
-#     class Arguments:
-#         boxInput = graphene.Argument(BoxInput)
-#
-#     box = graphene.Field(BoxNode)
-#
-#     @staticmethod
-#     def mutate(root, info, **kwargs):
-#         boxInput = kwargs.get("boxInput")
-#         newBox = Box(
-#             ownerUserId = Box.objects.get(pk=boxInput.userId)
-#         )
-#         newBox.save(force_insert=True)
-#         return CreateBox(box=newBox)
-#
 
 class AssignBoxToUser(graphene.Mutation):
     class Arguments:
