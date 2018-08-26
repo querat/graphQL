@@ -1,5 +1,5 @@
-from django.db import models
-from athome.api.models import User
+from django.db import models# class AssignModuleToBox(graphene.Mutation):
+from athome.api.models.User import User
 
 # Class used to represent a central AtHome box
 class Box(models.Model):

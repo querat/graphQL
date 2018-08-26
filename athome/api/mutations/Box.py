@@ -1,7 +1,8 @@
 import  graphene
-from    graphql            import GraphQLError
-from    graphene_django    import DjangoObjectType
-from    athome.api.models  import Box, User
+from    graphql                 import GraphQLError
+from    graphene_django         import DjangoObjectType
+from    athome.api.models.Box   import Box
+from    athome.api.models.User  import User
 
 
 from athome.api.models.Box  import Box

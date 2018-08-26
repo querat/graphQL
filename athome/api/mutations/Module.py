@@ -1,6 +1,8 @@
 import graphene
-from graphene_django import DjangoObjectType
-from athome.api.models import Module
+import graphql
+from graphene_django            import DjangoObjectType
+from athome.api.models.Module   import Module
+from athome.api.models.Box      import Box
 
 
 class ModuleNode(DjangoObjectType):
@@ -56,3 +58,38 @@ class UpdateModule(graphene.Mutation):
 
         toUpdate.save(force_update=True)
         return UpdateModule(module=toUpdate)
+
+
+class AssignModuleToBox(graphene.Mutation):
+    module = graphene.Field(ModuleNode)
+
+    class Arguments:
+        moduleId    = graphene.Argument(graphene.ID)
+        boxId       = graphene.Argument(graphene.ID)
+        boxAuthCode = graphene.Argument(graphene.String)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        moduleId        = kwargs.get("moduleId")
+        boxId           = kwargs.get("boxId")
+        boxAuthCode     = kwargs.get("boxAuthCode")
+
+        affectedModule  = None
+        box             = None
+
+        try:
+            affectedModule = Module.objects.get(pk=moduleId)
+        except Module.DoesNotExist:
+            raise graphql.GraphQLError("Module #{} does not exist".format(moduleId))
+        try:
+            box = Box.objects.get(pk=boxId)
+        except Box.DoesNotExist:
+            raise graphql.GraphQLError("Box #{} does not exist".format(boxId))
+
+        if box.authCode != boxAuthCode:
+            raise graphql.GraphQLError("Invalid box authentication code")
+
+        affectedModule.box = box
+        affectedModule.save(force_update=True)
+
+        return AssignModuleToBox(module=affectedModule)

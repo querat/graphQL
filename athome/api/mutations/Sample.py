@@ -1,6 +1,6 @@
 import graphene
 from graphene_django    import DjangoObjectType
-from athome.api.models  import Sample
+from athome.api.models.Sample  import Sample
 
 from athome.api.models.Module  import Module
 

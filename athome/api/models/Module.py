@@ -1,4 +1,5 @@
 from django.db import models
+from athome.api.models.Box import Box
 
 class Module(models.Model):
 
@@ -33,7 +34,14 @@ class Module(models.Model):
     # environmental samples gathered by the module.
     # (see the Sample type)
     # returned as an array
-    # samples = # (See models/Sample.py)
+    # samples = # (See models/Sample.py
+
+    box         = models.ForeignKey(
+        Box
+        , null=True
+        , related_name="modules"
+        , on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return self.name

@@ -1,6 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
-from athome.api.models import User
+from athome.api.models.User import User
 
 
 class UserNode(DjangoObjectType):

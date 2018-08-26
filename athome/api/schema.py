@@ -3,7 +3,7 @@ from    django.db.models            import Model
 from    graphene_django             import DjangoObjectType
 from    graphene_django.debug       import DjangoDebug
 from    athome.api.models           import Module, Sample, User
-from    athome.api.mutations.Module import ModuleNode, CreateModule, UpdateModule
+from    athome.api.mutations.Module import ModuleNode, CreateModule, UpdateModule, AssignModuleToBox
 from    athome.api.mutations.Sample import SampleNode, CreateSample
 from    athome.api.mutations.User   import UserNode,   CreateUser
 from    athome.api.mutations.Box    import BoxNode,    CreateBox   , AssignBoxToUser
@@ -32,6 +32,7 @@ class Query(object):
 class Mutation(object):
     createModule        = CreateModule.Field()
     updateModule        = UpdateModule.Field()
+    assignModuleToBox   = AssignModuleToBox.Field()
 
     createSample        = CreateSample.Field()
 
