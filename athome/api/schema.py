@@ -6,6 +6,7 @@ from    athome.api.models           import Module, Sample, User
 from    athome.api.mutations.Module import ModuleNode, CreateModule, UpdateModule
 from    athome.api.mutations.Sample import SampleNode, CreateSample
 from    athome.api.mutations.User   import UserNode,   CreateUser
+from    athome.api.mutations.Box    import BoxNode,    CreateBox   , AssignBoxToUser
 
 
 class Query(object):
@@ -27,6 +28,7 @@ class Query(object):
     def resolve_allUsers(self, info, **kwargs):
         return User.objects.all() # .order_by(User.id)
 
+
 class Mutation(object):
     createModule        = CreateModule.Field()
     updateModule        = UpdateModule.Field()
@@ -34,5 +36,8 @@ class Mutation(object):
     createSample        = CreateSample.Field()
 
     createUser          = CreateUser.Field()
+
+    createBox           = CreateBox.Field()
+    assignBoxToUser     = AssignBoxToUser.Field()
 
     debug               = graphene.Field(DjangoDebug)
