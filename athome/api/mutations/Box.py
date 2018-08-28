@@ -45,15 +45,13 @@ class AssignBoxToUser(graphene.Mutation):
         if modifiedBox.authCode != auth:
             raise GraphQLError("Invalid authentication code")
 
-        modifiedBox.ownerUserId = newOwner
+        modifiedBox.user = newOwner
         modifiedBox.save(force_update=True)
 
         return AssignBoxToUser(box=modifiedBox)
 
 
 class CreateBox(graphene.Mutation):
-    # class Arguments:
-    #     boxInput = graphene.Argument(BoxInput)
 
     box = graphene.Field(BoxNode)
 

@@ -10,8 +10,10 @@ class Box(models.Model):
     # Code the box needs to send to authenticate
     authCode    = models.TextField()
 
-    # Id of the user owning the box
-    ownerUserId = models.ForeignKey(
+    # owning the box
+    # Disabled, it would allow a box to access its user data.
+    # There is no need for it and it would be a potential security flaw
+    user = models.ForeignKey(
         User
         , related_name="boxes"          # name of the field in graphQL queries
         , on_delete=models.DO_NOTHING   # Box still exists on user deletion

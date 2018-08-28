@@ -17,6 +17,7 @@ class UserInput(graphene.InputObjectType):
     password = graphene.String()
 
 
+# TODO avoid duplicate usernames
 class CreateUser(graphene.Mutation):
 
     user = graphene.Field(UserNode)

@@ -61,12 +61,13 @@ class UpdateModule(graphene.Mutation):
 
 
 class AssignModuleToBox(graphene.Mutation):
-    module = graphene.Field(ModuleNode)
 
     class Arguments:
         moduleId    = graphene.Argument(graphene.ID)
         boxId       = graphene.Argument(graphene.ID)
         boxAuthCode = graphene.Argument(graphene.String)
+
+    module = graphene.Field(ModuleNode)
 
     @staticmethod
     def mutate(root, info, **kwargs):
