@@ -16,6 +16,7 @@ class Query(object):
     debug           = graphene.Field(DjangoDebug)
     allModules      = graphene.List(ModuleNode)
     allSamples      = graphene.List(SampleNode)
+    allBoxes        = graphene.List(BoxNode)
     allUsers        = graphene.List(UserNode)
     getModuleById   = graphene.Field(ModuleNode, moduleId=graphene.Int())
 
@@ -57,6 +58,9 @@ class Query(object):
             raise graphql.GraphQLError("invalid authcode for box #".format(boxId))
         return box
 
+    def resolve_allBoxes(self, _, **kwargs):
+        return Box.objects.all()
+
     def resolve_allModules(self, _, **kwargs):
         return Module.objects.all()
 
@@ -68,6 +72,7 @@ class Query(object):
 
     def resolve_allUsers(self, info, **kwargs):
         return User.objects.all() # .order_by(User.id)
+
 
 
 class Mutation(object):

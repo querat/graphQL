@@ -11,6 +11,14 @@ class BoxNode(DjangoObjectType):
     class Meta:
         model = Box
 
+    # It is important that a box can access its user's data
+    # But not their confidential data
+    def resolve_user(self, info, **kwargs):
+        if self.user is None:
+            return None
+        self.user.password = "[private]"
+        return self.user
+
 
 class BoxInput(graphene.InputObjectType):
     userId = graphene.ID()
