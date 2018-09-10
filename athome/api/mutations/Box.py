@@ -66,7 +66,7 @@ class CreateBox(graphene.Mutation):
     @staticmethod
     def mutate(root, info, **kwargs):
         newBox = Box(
-            ownerUserId = None              # No user owns the box at its creation
+            user = None              # No user owns the box at its creation
             , authCode="authCodeHashHere"
         )
         newBox.save(force_insert=True)
