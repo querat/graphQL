@@ -1,6 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from athome.api.models.User import User
+import bcrypt
 
 
 class UserNode(DjangoObjectType):
@@ -28,9 +29,11 @@ class CreateUser(graphene.Mutation):
     @staticmethod
     def mutate(root, info, **kwargs):
         userInput = kwargs.get("userInput")
+        # Unique salt for each User. is stored in the password hash itself by bcrypt
+        hashedPw = bcrypt.hashpw(userInput.password.encode('utf8'), bcrypt.gensalt())
         dbUser = User(
             name=userInput.name
-            , password=userInput.password
+            , password=hashedPw.decode()
             , email=userInput.email
         )
         dbUser.save(force_insert=True)

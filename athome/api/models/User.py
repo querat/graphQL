@@ -11,6 +11,8 @@ class User(models.Model):
     # Password of the user. Hashed and salted
     password = models.TextField()
 
+    salt = models.TextField(default="")
+
     # Email of the user
     email = models.TextField()
 

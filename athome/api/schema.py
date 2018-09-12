@@ -1,3 +1,4 @@
+import  bcrypt
 import  graphene
 import  graphql
 from    django.db.models            import Model
@@ -41,7 +42,7 @@ class Query(object):
             user = User.objects.get(name=userName)
         except User.DoesNotExist:
             raise graphql.GraphQLError("User '{}' not found".format(userName))
-        if password != user.password:
+        if not bcrypt.checkpw(password.encode('utf8'), user.password.encode('utf8')):
             raise graphql.GraphQLError("invalid password for User '{}'".format(userName))
         return user
 
