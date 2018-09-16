@@ -66,7 +66,7 @@ class SendSamples(graphene.Mutation):
             try:
                 sampleModule = Module.objects.get(pk=sampleInput.moduleId)
             except:
-                raise graphql.GraphQLError("module #{} does not exist")
+                raise graphql.GraphQLError("module #{} does not exist".format(sampleInput.moduleId))
             [setattr(dbSample, key, value) for key, value in sampleInput.items()]
             dbSample.module = sampleModule
             dbSample.save(force_insert=True)

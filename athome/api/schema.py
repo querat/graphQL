@@ -14,7 +14,7 @@ from    athome.api.mutations.Box    import Box, BoxNode,    CreateBox   , Assign
 
 
 class Query(object):
-    debug           = graphene.Field(DjangoDebug)
+    # debug           = graphene.Field(DjangoDebug)
     allModules      = graphene.List(ModuleNode)
     allSamples      = graphene.List(SampleNode)
     allBoxes        = graphene.List(BoxNode)

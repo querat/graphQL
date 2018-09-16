@@ -1,4 +1,5 @@
 django==2.0
+django-filter
 graphene_django>=2.0
 graphene
 bcrypt

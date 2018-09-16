@@ -6,12 +6,10 @@ class User(models.Model):
     id = models.AutoField(primary_key=True)
 
     # Nickname choosen by the user
-    name = models.TextField()
+    name = models.TextField(unique=True)
 
     # Password of the user. Hashed and salted
     password = models.TextField()
-
-    salt = models.TextField(default="")
 
     # Email of the user
     email = models.TextField()
