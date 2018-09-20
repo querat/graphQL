@@ -1,15 +1,9 @@
 import graphene
 import graphql
-from graphene_django            import DjangoObjectType
 from athome.api.models.Sample   import Sample
 from athome.api.models.Box      import Box
 from athome.api.models.Module   import Module
-
-class SampleNode(DjangoObjectType):
-    def resolve_id(self, info):
-        return self.id
-    class Meta:
-        model = Sample
+from athome.api.mutations.nodes.Sample import SampleNode
 
 
 class SampleInput(graphene.InputObjectType):

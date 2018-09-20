@@ -1,28 +1,10 @@
 import  graphene
-from    graphql                     import GraphQLError
-from    graphene_django             import DjangoObjectType
-from    athome.api.models.Box       import Box
-from    athome.api.models.User      import User
-# from    athome.api.mutations.Module import ModuleNode
+from    graphql                             import GraphQLError
+from    athome.api.models.User              import User
+from    athome.api.models.Box               import Box
+from    athome.api.mutations.nodes.Box      import BoxNode
+from    athome.api.mutations.nodes.Module   import ModuleNode
 
-from athome.api.models.Box  import Box
-
-class BoxNode(DjangoObjectType):
-    class Meta:
-        model = Box
-
-    # It is important that a box can access its user's data
-    # But not their confidential data
-    def resolve_user(self, info, **kwargs):
-        if self.user is None:
-            return None
-        self.user.password = "[private]"
-        return self.user
-
-    getModulesByType = graphene.List(ModuleNode, type=graphene.String())
-    def resolve_getModuleByType(self, info, **kwargs):
-        return 42
-        pass
 
 class BoxInput(graphene.InputObjectType):
     userId = graphene.ID()

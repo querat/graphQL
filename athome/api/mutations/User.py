@@ -1,15 +1,8 @@
 import graphene
-from graphene_django import DjangoObjectType
 from athome.api.models.User import User
 import bcrypt
 
-
-class UserNode(DjangoObjectType):
-    def resolve_id(self, info):
-        return self.id
-
-    class Meta:
-        model = User
+from athome.api.mutations.nodes.User import UserNode
 
 
 class UserInput(graphene.InputObjectType):
