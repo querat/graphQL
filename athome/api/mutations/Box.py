@@ -1,9 +1,9 @@
 import  graphene
-from    graphql                 import GraphQLError
-from    graphene_django         import DjangoObjectType
-from    athome.api.models.Box   import Box
-from    athome.api.models.User  import User
-
+from    graphql                     import GraphQLError
+from    graphene_django             import DjangoObjectType
+from    athome.api.models.Box       import Box
+from    athome.api.models.User      import User
+# from    athome.api.mutations.Module import ModuleNode
 
 from athome.api.models.Box  import Box
 
@@ -19,6 +19,10 @@ class BoxNode(DjangoObjectType):
         self.user.password = "[private]"
         return self.user
 
+    getModulesByType = graphene.List(ModuleNode, type=graphene.String())
+    def resolve_getModuleByType(self, info, **kwargs):
+        return 42
+        pass
 
 class BoxInput(graphene.InputObjectType):
     userId = graphene.ID()

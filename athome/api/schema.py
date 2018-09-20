@@ -9,8 +9,8 @@ from    athome.api.models           import Module, Sample
 from    athome.api.models.User      import User
 from    athome.api.mutations.Module import Module, ModuleNode, CreateModule, UpdateModule, AssignModuleToBox
 from    athome.api.mutations.Sample import Sample, SampleNode, CreateSample, SendSamples
-from    athome.api.mutations.User   import User, UserNode,   CreateUser
-from    athome.api.mutations.Box    import Box, BoxNode,    CreateBox   , AssignBoxToUser
+from    athome.api.mutations.User   import User,   UserNode,   CreateUser
+from    athome.api.mutations.Box    import Box,    BoxNode,    CreateBox   , AssignBoxToUser
 
 
 class Query(object):
