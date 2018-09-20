@@ -11,5 +11,5 @@ class DataMonitor:
         if user is None:
             return
 
+        print("coin coin")
 
-        return 42 # breakpoint pour le debugger lol

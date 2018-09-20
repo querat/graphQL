@@ -67,6 +67,9 @@ class SendSamples(graphene.Mutation):
             dbSample.save(force_insert=True)
             nbSentSamples += 1
 
+        # Send the new samples to the analyzer.
+        # If an environmental anomaly is detected,
+        # it will notify the user owning the box
         DataMonitor.analyzeNewSamples(
             user=box.user
             , box=box
