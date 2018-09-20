@@ -1,17 +1,18 @@
 import graphene
 import graphql
-from athome.api.models.Sample   import Sample
-from athome.api.models.Box      import Box
-from athome.api.models.Module   import Module
-from athome.api.mutations.nodes.Sample import SampleNode
-
+from athome.api.models.Sample           import Sample
+from athome.api.models.Box              import Box
+from athome.api.models.Module           import Module
+from athome.api.models.User             import User
+from athome.api.mutations.nodes.Sample  import SampleNode
+from athome.api.dataMonitor.DataMonitor import DataMonitor
 
 class SampleInput(graphene.InputObjectType):
     payload         = graphene.String()
     date            = graphene.DateTime()
     moduleId        = graphene.ID()
 
-
+# TODO remove
 class CreateSample(graphene.Mutation):
     class Arguments:
         sampleInput = graphene.Argument(SampleInput)
@@ -65,6 +66,12 @@ class SendSamples(graphene.Mutation):
             dbSample.module = sampleModule
             dbSample.save(force_insert=True)
             nbSentSamples += 1
+
+        DataMonitor.analyzeNewSamples(
+            user=box.user
+            , box=box
+            , sampleList=sampleInputs
+        )
 
         return SendSamples(nbSentSamples=nbSentSamples)
 
