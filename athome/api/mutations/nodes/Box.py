@@ -19,5 +19,11 @@ class BoxNode(DjangoObjectType):
     getModulesByType = graphene.List(ModuleNode, moduleType=graphene.String())
     def resolve_getModulesByType(self, info, **kwargs):
         moduleType = kwargs.get("moduleType")
-
         return Module.objects.filter(box=self, type=moduleType)
+
+    getModuleById = graphene.Field(ModuleNode, moduleId=graphene.ID())
+    def resolve_getModuleById(self, info, **kwargs):
+        moduleId = kwargs.get("moduleId")
+        if not moduleId:
+            return None
+        return Module.objects.get(id=moduleId)
