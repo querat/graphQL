@@ -1,4 +1,4 @@
-from django.db import models# class AssignModuleToBox(graphene.Mutation):
+from django.db import models
 from athome.api.models.User import User
 
 # Class used to represent a central AtHome box
@@ -10,9 +10,7 @@ class Box(models.Model):
     # Code the box needs to send to authenticate
     authCode    = models.TextField()
 
-    # owning the box
-    # Disabled, it would allow a box to access its user data.
-    # There is no need for it and it would be a potential security flaw
+    # User owning the box
     user = models.ForeignKey(
         User
         , related_name="boxes"          # name of the field in graphQL queries

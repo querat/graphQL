@@ -7,11 +7,11 @@ from athome.api.mutations.nodes.Sample  import SampleNode
 
 
 class ModuleNode(DjangoObjectType):
-    def resolve_id(self, info):
-        return self.id
-
     class Meta:
         model = Module
+
+    def resolve_id(self, info):
+        return self.id
 
     def resolve_samples(self, info, **kwargs):
         return self.samples
