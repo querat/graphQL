@@ -4,7 +4,8 @@ from graphene_django import DjangoObjectType
 from athome.api.models.Module           import Module
 from athome.api.models.Sample           import Sample
 from athome.api.mutations.nodes.Sample  import SampleNode
-
+from athome.api.mutations.Threshold     import ThresholdNode
+from athome.api.mutations.nodes.Threshold import NewThreshold
 
 class ModuleNode(DjangoObjectType):
     class Meta:
@@ -26,3 +27,8 @@ class ModuleNode(DjangoObjectType):
             return None
 
         return Sample.objects.get(id=pootisId)
+
+
+    newThreshold = NewThreshold.Field()
+    def resolve_newThreshold(self, *args, **kwargs):
+        NewThreshold.mutate()
