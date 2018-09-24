@@ -1,4 +1,5 @@
 import  datetime
+import  graphql
 import  graphene
 from    graphene_django                         import DjangoObjectType
 
@@ -51,7 +52,8 @@ class ModuleNode(DjangoObjectType):
         totalTimeInSeconds =  0 if seconds is None else seconds
         totalTimeInSeconds += 0 if minutes is None else minutes*60
         totalTimeInSeconds += 0 if hours   is None else hours*3600
-
+        if totalTimeInSeconds <= 0:
+            raise graphql.GraphQLError("you need to fill any or multiple of the seconds, minutes and/or hours parameters")
         now = datetime.datetime.now()
         dateToFetchFrom = now - datetime.timedelta(seconds=totalTimeInSeconds)
 
