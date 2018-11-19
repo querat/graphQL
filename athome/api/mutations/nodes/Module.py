@@ -65,3 +65,35 @@ class ModuleNode(DjangoObjectType):
         if maxNumberOfSamples is not None:
             return filtered[:maxNumberOfSamples]
         return filtered()
+
+    getPonderedSamplesSince = graphene.List(
+        SampleNode
+        , hours=graphene.Int(required=False)
+        , minutes=graphene.Int(required=False)
+        , seconds=graphene.Int(required=False)
+        , maxNumberOfSamples=graphene.Int(required=False)
+    )
+
+    def resolve_getPonderedSamplesSince(self, info, **kwargs):
+        hours = kwargs.get("hours")
+        minutes = kwargs.get("minutes")
+        seconds = kwargs.get("seconds")
+        maxNumberOfSamples = kwargs.get("maxNumberOfSamples")
+
+        totalTimeInSeconds = 0 if seconds is None else seconds
+        totalTimeInSeconds += 0 if minutes is None else minutes * 60
+        totalTimeInSeconds += 0 if hours is None else hours * 3600
+        if totalTimeInSeconds <= 0:
+            raise graphql.GraphQLError(
+                "you need to fill any or multiple of the seconds, minutes and/or hours parameters")
+        now = datetime.datetime.now()
+        dateToFetchFrom = now - datetime.timedelta(seconds=totalTimeInSeconds)
+
+        print(now.strftime('%Y-%m-%dT%H:%M:%S.%f'))
+        print(dateToFetchFrom.strftime('%Y-%m-%dT%H:%M:%S.%f'))
+
+        filtered = Sample.objects.filter(date__gt=dateToFetchFrom)
+
+        if maxNumberOfSamples is not None:
+            return filtered[:maxNumberOfSamples]
+        return filtered()

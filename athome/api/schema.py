@@ -12,7 +12,7 @@ from    athome.api.mutations.User           import User, CreateUser
 from    athome.api.mutations.nodes.User     import UserNode
 from    athome.api.mutations.Box            import Box, CreateBox   , AssignBoxToUser
 from    athome.api.mutations.nodes.Box      import BoxNode
-from    athome.api.mutations.Threshold      import Threshold, CreateThreshold
+from    athome.api.mutations.Threshold      import Threshold, CreateThreshold, UpdateThreshold
 
 class Query(object):
     # debug           = graphene.Field(DjangoDebug)
@@ -93,4 +93,4 @@ class Mutation(object):
     sendSamples         = SendSamples.Field()
 
     createThreshold     = CreateThreshold.Field()
-
+    updateThreshold     = UpdateThreshold.Field()
