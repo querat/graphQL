@@ -11,5 +11,3 @@ class DataMonitor:
         if user is None:
             return
 
-        print("coin coin")
-

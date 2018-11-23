@@ -55,7 +55,7 @@ class GraphQLClient():
 
 
 
-NB_SAMPLES = 1000
+NB_SAMPLES = 24
 
 
 def trunc_gauss(mu, sigma, bottom, top):
@@ -76,14 +76,14 @@ def generateListOfGaussianDeltas(nbItems):
     # for samples slowly going Over then under the maximum threshold
     halfOfList = [(num * 1) for num in nums]
     # for samples slowly going Below then over the minimum threshold
-    otherHalf = [(num * -1) for num in nums]
-    result = halfOfList + otherHalf
+    # otherHalf = [(num * -1) for num in nums]
+    result = halfOfList # + otherHalf
 
     # enable this snippet if you wanna see the curves
     # mp.plot(result)
     # mp.show()
 
-    return result
+    return result * 2
 
 # Plain Old Data model for Samples
 class Sample:
@@ -100,18 +100,21 @@ class Sample:
         }}'''.format(self.moduleId, self.payload, self.timeStamp)
     __repr__ = __str__
 
+    def toJson(self):
+        return json.dumps(self.__dict__)
+
 def addFakeTimeLapseToSamples(listOfSamples):
     now = datetime.datetime.now()
     for x in range(NB_SAMPLES):
-        timeElapsed = x * 10  # sampleID * 10 seconds
+        timeElapsed = x * 300  # sampleID * 5 min
         fakeTimeStamp = (now + datetime.timedelta(seconds=timeElapsed))
-        listOfSamples[x].timeStamp = fakeTimeStamp.strftime('%Y-%m-%d %H:%M:%S.%f')
+        listOfSamples[x].timeStamp = fakeTimeStamp.strftime('%Y-%m-%dT%H:%M:%S.%f')
 
 
 
 def makeTemperatureList(listOfDeltas):
     # 20 degrees Celsius + variations
-    return [int(((delta * 10) + 20)) for delta in listOfDeltas]
+    return [int(((delta * 1000) + 0)) for delta in listOfDeltas]
 
 
 if __name__ == "__main__":
@@ -123,11 +126,25 @@ if __name__ == "__main__":
     temperatures = makeTemperatureList(listOfRandomDeltas)
     for sample, temperature in zip(listOfSamples, temperatures):
         # °
-        sample.payload = '''{{ "unit_measure": "C", "measure":"{}", "name":"temperature" }}'''.format(temperature)
+        sample.payload = '''{{ "unit_measure": "ppm", "measure":"{}", "name":"CO" }}'''.format(temperature)
     for sample in listOfSamples:
-        sample.moduleId = 2 # temperature module ID
+        sample.moduleId = 3
 
-        jsonPostData = (''' 
+    print("[")
+    for sample in listOfSamples:
+        print("  {")
+        print('    "moduleId":"{}",'.format(sample.moduleId))
+        print('    "payload":"{}",'.format(sample.payload.replace('"', '\\"')))
+        print('    "date":"{}"'.format(sample.timeStamp))
+        print("  },")
+    print("]")
+
+
+
+    sys.exit(0)
+
+
+    jsonPostData = (''' 
             mutation {
                 newSample (sample: {
                   date: "%s"
@@ -145,6 +162,6 @@ if __name__ == "__main__":
 
     sample = listOfSamples[random.randint(0, 999)]
     # for sample in listOfSamples:
-    graphQLClient.send_sample(42, "youpiyoup", "lolxD")
+    # graphQLClient.send_sample(42, "youpiyoup", "lolxD")
 
     sys.exit(0)

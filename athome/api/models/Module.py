@@ -36,6 +36,8 @@ class Module(models.Model):
     # returned as an array
     # samples = # (See models/Sample.py
 
+    authCode    = models.TextField()
+
     box         = models.ForeignKey(
         Box
         , null=True

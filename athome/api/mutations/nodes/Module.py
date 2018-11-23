@@ -19,18 +19,6 @@ class ModuleNode(DjangoObjectType):
     def resolve_samples(self, info, **kwargs):
         return self.samples
 
-    pootis = graphene.Field(SampleNode, pootis=graphene.ID())
-
-    def resolve_pootis(self, info, **kwargs):
-        pootisId = None
-        try:
-            pootisId = kwargs.get("pootis")
-        except Exception as e:
-            return None
-
-        return Sample.objects.get(id=pootisId)
-
-
     newThreshold = NewThreshold.Field()
     def resolve_newThreshold(self, *args, **kwargs):
         NewThreshold.mutate()

@@ -25,9 +25,8 @@ class CreateThreshold(graphene.Mutation):
         threshold = Threshold()
         thresholdInput = kwargs.get("thresholdInput")
 
-        args = ["name", "default", "min", "max", "current"]
-
-        for requiredArgKey in args:
+        requiredArgs = ["name", "default", "min", "max", "current"]
+        for requiredArgKey in requiredArgs:
             valueFromInput = getattr(thresholdInput, requiredArgKey)
             if valueFromInput is None:
                 raise graphql.GraphQLError(f"Missing argument: {requiredArgKey}")

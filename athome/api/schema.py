@@ -1,9 +1,10 @@
 import  bcrypt
 import  graphene
 import  graphql
+from    graphql                             import GraphQLError
 from    graphene_django.debug               import DjangoDebug
-from    athome.api.models                   import Module, Sample
 
+from    athome.api.models                   import Module, Sample
 from    athome.api.mutations.Module         import Module, CreateModule, UpdateModule, AssignModuleToBox
 from    athome.api.mutations.nodes.Module   import ModuleNode
 from    athome.api.mutations.Sample         import Sample, CreateSample, SendSamples
@@ -20,7 +21,12 @@ class Query(object):
     allSamples      = graphene.List(SampleNode)
     allBoxes        = graphene.List(BoxNode)
     allUsers        = graphene.List(UserNode)
-    getModuleById   = graphene.Field(ModuleNode, moduleId=graphene.Int())
+
+    getModuleById   = graphene.Field(
+        ModuleNode
+        , moduleId=graphene.Int()
+        , moduleAuthCode=graphene.String()
+    )
 
     getUser         = graphene.Field(
         UserNode
@@ -33,6 +39,7 @@ class Query(object):
         , boxId       = graphene.ID()
         , boxAuthCode = graphene.String()
     )
+
 
     def resolve_getUser(self, info, **kwargs):
         userName = kwargs.get("userName")
@@ -47,6 +54,7 @@ class Query(object):
             raise graphql.GraphQLError("invalid password for User '{}'".format(userName))
         return user
 
+
     def resolve_getBoxById(self, _, **kwargs):
         boxId       = kwargs.get("boxId")
         authCode    = kwargs.get("boxAuthCode")
@@ -60,17 +68,33 @@ class Query(object):
             raise graphql.GraphQLError("invalid authcode for box #".format(boxId))
         return box
 
+
     def resolve_allBoxes(self, _, **kwargs):
         return Box.objects.all()
+
 
     def resolve_allModules(self, _, **kwargs):
         return Module.objects.all()
 
+
     def resolve_allSamples(self, _, **kwargs):
         return Sample.objects.all().order_by('date')
 
+
     def resolve_getModuleById(self, info, **kwargs):
-        return ModuleNode.get_node(info, kwargs.get("moduleId"))
+        required = ["moduleId", "moduleAuthCode"]
+        for req in required:
+            if req not in kwargs.keys():
+                raise GraphQLError(f"Missing argument {req}")
+
+        module = Module.objects.filter(id=kwargs["moduleId"]).first()
+        if module is None:
+            raise GraphQLError(f"Module {kwargs['moduleId']} does not exist")
+
+        if kwargs["moduleAuthCode"] != module.authCode:
+            raise GraphQLError(f"Invalid auth code provided for module {kwargs['moduleId']}.")
+        return module
+
 
     def resolve_allUsers(self, info, **kwargs):
         return User.objects.all() # .order_by(User.id)
