@@ -81,7 +81,7 @@ if __name__ == "__main__":
     import bcrypt
     user = User(
         name=USERNAME
-        , password=bcrypt.hashpw(USERPASS.encode("utf8"), bcrypt.gensalt())
+        , password=bcrypt.hashpw(USERPASS.encode("utf8"), bcrypt.gensalt()).decode()
         , email='no@no.com'
     )
     user.save(force_insert=True)
