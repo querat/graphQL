@@ -78,9 +78,10 @@ if __name__ == "__main__":
             box.delete()
         user.delete()
 
+    import bcrypt
     user = User(
         name=USERNAME
-        , password=USERPASS
+        , password=bcrypt.hashpw(USERPASS.encode("utf8"), bcrypt.gensalt())
         , email='no@no.com'
     )
     user.save(force_insert=True)
