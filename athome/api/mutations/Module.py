@@ -15,6 +15,7 @@ class ModuleInput(graphene.InputObjectType):
     vendor = graphene.String()
 
 
+# TODO DEFAULT THRESHOLDS
 class CreateModule(graphene.Mutation):
     class Arguments:
         moduleInput = graphene.Argument(ModuleInput)

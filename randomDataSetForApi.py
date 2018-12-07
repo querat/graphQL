@@ -1,14 +1,29 @@
-import random
-import datetime
-import numpy as np
-from matplotlib import pyplot as mp
-import sys
+#!/usr/bin/env python3
+import  os
+import  sys
+import  time
+import  numpy
+import  django
+import  random
+import  requests
+import  datetime
+import  datetime
+from    matplotlib      import pyplot as mp
 
-import requests
-import datetime
-import time
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE",
+    "athome.settings"
+)
+django.setup()
 
-class GraphQLClient():
+from athome.api.models.Sample import Sample
+from athome.api.models.User import User
+from athome.api.models.Module import Module
+from athome.api.models.Threshold import Threshold
+from athome.api.models.Box import Box
+
+
+class GraphQLClient:
     """
     Class designed to interact with atHome's GraphQL BoxApi
     Only used to send samples at this moment
@@ -67,11 +82,11 @@ def trunc_gauss(mu, sigma, bottom, top):
 
 def generateListOfGaussianDeltas(nbItems):
     def gaussian(x, mu, sig):
-        return np.exp(-np.power(x - mu, 2.) / (2 * np.power(sig, 2.)))
+        return numpy.exp(-numpy.power(x - mu, 2.) / (2 * numpy.power(sig, 2.)))
 
     mu, sig = 0, 0.5
 
-    nums = gaussian(np.linspace(-2, 2, nbItems /2), mu, sig)
+    nums = gaussian(numpy.linspace(-2, 2, nbItems /2), mu, sig)
 
     # for samples slowly going Over then under the maximum threshold
     halfOfList = [(num * 1) for num in nums]
@@ -139,29 +154,10 @@ if __name__ == "__main__":
         print("  },")
     print("]")
 
-
-
-    sys.exit(0)
-
-
-    jsonPostData = (''' 
-            mutation {
-                newSample (sample: {
-                  date: "%s"
-                  payload: "%s"   
-                  moduleId: %s   
-                }){
-                  date
-                  payload
-                  moduleId
-                }
-            }
-        ''' % ("lol", "lol", "0")).replace("\n", " ")
-        # import re
-        # jsonPostData = re.sub(" +", " ", jsonPostData)
-
     sample = listOfSamples[random.randint(0, 999)]
     # for sample in listOfSamples:
     # graphQLClient.send_sample(42, "youpiyoup", "lolxD")
+
+    json.dumps(sample)
 
     sys.exit(0)

@@ -14,7 +14,7 @@ class Box(models.Model):
     user = models.ForeignKey(
         User
         , related_name="boxes"          # name of the field in graphQL queries
-        , on_delete=models.DO_NOTHING   # Box still exists on user deletion
+        , on_delete=models.SET_NULL     # Box still exists on user deletion
         , null=True                     # Nullable, box can have no user assigned
     )
 
