@@ -3,7 +3,7 @@ import  numpy
 import  random
 import  django
 from    datetime        import datetime, timedelta
-from    matplotlib      import pyplot as mp
+# from    matplotlib      import pyplot as mp
 
 USERNAME = "test"
 USERPASS = "test"
